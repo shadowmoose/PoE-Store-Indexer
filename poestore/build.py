@@ -3,6 +3,7 @@ import re
 from bs4 import BeautifulSoup
 import json
 import os
+from gist import Gist
 
 
 class Builder:
@@ -58,13 +59,20 @@ class Builder:
 
 	def write(self, file):
 		with open(file, 'w') as o:
-			o.write(json.dumps([o for o in self.items.values()], indent=4, sort_keys=True))
+			o.write(self.to_string())
+
+	def to_string(self):
+		return json.dumps([o for o in self.items.values()], indent=4, sort_keys=True)
 
 
 if __name__ == "__main__":
 	_b = Builder()
 	_b.run()
-	print(_b.items)
-	os.makedirs('../data/', exist_ok=True)
+	filepath = os.path.join(os.path.realpath(__file__), '/../data/store_items.json')
+	os.makedirs(os.path.dirname(filepath), exist_ok=True)
 	_b.write('../data/store_items.json')
-	print('Done.')
+	_g = Gist(gist_id='c5b9e22d36cd9b08329b97a9aaa19746', bkup_file='../api_key.key')
+	if _g.change('data.json', _b.to_string()):
+		print('Done. Pushed changes.')
+	else:
+		print('Done.')
