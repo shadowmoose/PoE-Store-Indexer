@@ -69,7 +69,7 @@ if __name__ == "__main__":
 	filepath = os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + '/../data/store_items.json')
 	print(filepath)
 	os.makedirs(os.path.dirname(filepath), exist_ok=True)
-	_b.write('../data/store_items.json')
+	_b.write(filepath)
 	_g = Gist(gist_id='c5b9e22d36cd9b08329b97a9aaa19746', bkup_file='../api_key.key')
 	if _g.change('data.json', _b.to_string()):
 		print('Done. Pushed changes.')
