@@ -35,7 +35,6 @@ class Builder:
 			img = i.find(attrs={'class': 'itemImage'})['data-href']
 			link = i.find(attrs={"class": 'name'})['onclick']
 			link = url + '#microtransaction-' + (re.findall(self.link_regex, link)[0])
-			print(name, '[%s]' % link, price, desc, img)
 			ob = {
 				'name': name,
 				'price': price,
@@ -52,7 +51,6 @@ class Builder:
 			self.items[nm] = it
 		else:
 			old = self.items[nm]
-			print(old)
 			old['categories'].extend(it['categories'])
 			old['price'] = min(it['price'], old['price'])
 			self.items[nm] = old
