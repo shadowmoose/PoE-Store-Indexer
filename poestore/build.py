@@ -68,7 +68,8 @@ class Builder:
 if __name__ == "__main__":
 	_b = Builder()
 	_b.run()
-	filepath = os.path.join(os.path.realpath(__file__), '/../data/store_items.json')
+	filepath = os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + '/../data/store_items.json')
+	print(filepath)
 	os.makedirs(os.path.dirname(filepath), exist_ok=True)
 	_b.write('../data/store_items.json')
 	_g = Gist(gist_id='c5b9e22d36cd9b08329b97a9aaa19746', bkup_file='../api_key.key')
