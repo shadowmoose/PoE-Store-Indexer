@@ -80,7 +80,7 @@ class Builder:
 			pf = p.find(class_='points')
 			if pf:
 				assert 'points' in pf.text.lower()
-				points = float(''.join([c for c in pf.text if c in '0123456789.']))
+				points = int(''.join([c for c in pf.text if c in '0123456789.']))
 			else:
 				for pts in p.find_all('li'):
 					if 'Points' in pts.text:
