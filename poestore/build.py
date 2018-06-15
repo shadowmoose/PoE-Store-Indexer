@@ -96,7 +96,7 @@ class Builder:
 				price = btn.text.strip().lower()
 				assert '$' in price
 				price = float(''.join([c for c in price if c in '0123456789.']))
-				print(price, flush=True)
+				print('\tPrice:', price, flush=True)
 			assert price is not None
 			self.packages.append({'pack_name': bundle,'points': points, 'approx_price_usd': price})
 		print('Found %s point packages.' % len(self.packages))
