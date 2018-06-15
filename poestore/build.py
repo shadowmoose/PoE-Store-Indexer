@@ -47,7 +47,7 @@ class Builder:
 
 	def add_item(self, it):
 		nm = it['name']
-		if it['name'] not in self.items:
+		if nm not in self.items:
 			self.items[nm] = it
 		else:
 			old = self.items[nm]
