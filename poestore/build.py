@@ -64,10 +64,10 @@ class Builder:
 
 	def to_string(self):
 		return json.dumps({
-			'items': [o for o in self.items.values()],
+			'store_items': [o for o in self.items.values()],
 			'@metadata': {
-				'version': 1.1,
-				'compatible_since': 1.1,
+				'version': 1.2,
+				'compatible_since': 1.2,
 				'timestamp': time.time(),
 				'runtime': time.time() - self.start
 			}
