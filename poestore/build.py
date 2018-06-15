@@ -3,6 +3,7 @@ import re
 from bs4 import BeautifulSoup
 import json
 import os
+import time
 from gist import Gist
 
 
@@ -12,19 +13,21 @@ class Builder:
 		self.regex = r"href=\s{0,}[\"']\/shop\/category\/(.+?)[\"']"
 		self.link_regex = r'"(.+?)"'
 		self.items = {}
+		self.start = 0
 
 	def run(self):
-		print('Loading store page...')
+		print('Loading store page...', flush=True)
+		self.start = time.time()
 		page = requests.get(self.url_base).text
 		matches = [m.group(1) for m in re.finditer(self.regex, page, re.MULTILINE)]
-		print('\t', 'Found %i matches.' % len(matches))
+		print('\t', 'Found %i categories.' % len(matches), flush=True)
 		for m in matches:
-			print(m)
+			print(m, flush=True)
 			self.parse_page(self.url_base + 'category/' + m, category=m)
-			print()
+			print('', flush=True)
 
 	def parse_page(self, url, category):
-		print(url)
+		print(url, flush=True)
 		resp = requests.get(url)
 		soup = BeautifulSoup(resp.text, "html.parser")
 		elems = soup.find_all(attrs={"class": 'shopItemBase'})
@@ -60,14 +63,22 @@ class Builder:
 			o.write(self.to_string())
 
 	def to_string(self):
-		return json.dumps([o for o in self.items.values()], indent=4, sort_keys=True)
+		return json.dumps({
+			'items': [o for o in self.items.values()],
+			'@metadata': {
+				'version': 1.1,
+				'compatible_since': 1.1,
+				'timestamp': time.time(),
+				'runtime': time.time() - self.start
+			}
+		}, indent=4, sort_keys=True)
 
 
 if __name__ == "__main__":
 	_b = Builder()
 	_b.run()
 	filepath = os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + '/../data/store_items.json')
-	print(filepath)
+	print(filepath, flush=True)
 	os.makedirs(os.path.dirname(filepath), exist_ok=True)
 	_b.write(filepath)
 	_g = Gist(gist_id='c5b9e22d36cd9b08329b97a9aaa19746', bkup_file='../api_key.key')
