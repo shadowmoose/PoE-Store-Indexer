@@ -10,9 +10,11 @@ from gist import Gist
 class Builder:
 	def __init__(self):
 		self.url_base = 'https://www.pathofexile.com/shop/'
+		self.package_url = 'https://www.pathofexile.com/purchase'
 		self.regex = r"href=\s{0,}[\"']\/shop\/category\/(.+?)[\"']"
 		self.link_regex = r'"(.+?)"'
 		self.items = {}
+		self.packages = []
 		self.start = 0
 
 	def run(self):
@@ -21,6 +23,7 @@ class Builder:
 		page = requests.get(self.url_base).text
 		matches = [m.group(1) for m in re.finditer(self.regex, page, re.MULTILINE)]
 		print('\t', 'Found %i categories.' % len(matches), flush=True)
+		assert len(matches) > 0
 		for m in matches:
 			print(m, flush=True)
 			self.parse_page(self.url_base + 'category/' + m, category=m)
@@ -29,6 +32,8 @@ class Builder:
 	def parse_page(self, url, category):
 		print(url, flush=True)
 		resp = requests.get(url)
+		if resp.status_code != 200:
+			raise Exception('Invalid response from server: %s' % resp.status_code)
 		soup = BeautifulSoup(resp.text, "html.parser")
 		elems = soup.find_all(attrs={"class": 'shopItemBase'})
 		for i in elems:
@@ -58,6 +63,45 @@ class Builder:
 			old['price'] = min(it['price'], old['price'])
 			self.items[nm] = old
 
+	def parse_packages(self):
+		print('Parsing Point Packages...', flush=True)
+		resp = requests.get(self.package_url)
+		if resp.status_code != 200:
+			raise Exception('Invalid response from server: %s' % resp.status_code)
+		soup = BeautifulSoup(resp.text, "html.parser")
+		for p in soup.find_all(class_='package'):
+			bundle = p.get('id')
+			points = None
+			price = None
+			if bundle is None:
+				bundle = 'PointPack'
+			print(bundle, flush=True)
+
+			pf = p.find(class_='points')
+			if pf:
+				assert 'points' in pf.text.lower()
+				points = float(''.join([c for c in pf.text if c in '0123456789.']))
+			else:
+				for pts in p.find_all('li'):
+					if 'Points' in pts.text:
+						try:
+							val = int(pts.strong.text)
+						except ValueError:
+							continue
+						points = val
+			print('\tPoints:', points, flush=True)
+			assert points is not None
+
+			for btn in p.find_all(class_='price'):
+				price = btn.text.strip().lower()
+				assert '$' in price
+				price = float(''.join([c for c in price if c in '0123456789.']))
+				print(price, flush=True)
+			assert price is not None
+			self.packages.append({'pack_name': bundle,'points': points, 'approx_price_usd': price})
+		print('Found %s point packages.' % len(self.packages))
+		assert len(self.packages) > 0
+
 	def write(self, file):
 		with open(file, 'w') as o:
 			o.write(self.to_string())
@@ -65,8 +109,9 @@ class Builder:
 	def to_string(self):
 		return json.dumps({
 			'store_items': [o for o in self.items.values()],
+			'point_packages': self.packages,
 			'@metadata': {
-				'version': 1.2,
+				'version': 1.3,
 				'compatible_since': 1.2,
 				'timestamp': time.time(),
 				'runtime': time.time() - self.start
@@ -76,6 +121,7 @@ class Builder:
 
 if __name__ == "__main__":
 	_b = Builder()
+	_b.parse_packages()
 	_b.run()
 	filepath = os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + '/../data/store_items.json')
 	print(filepath, flush=True)
