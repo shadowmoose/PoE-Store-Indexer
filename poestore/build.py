@@ -60,7 +60,7 @@ class Builder:
 		else:
 			old = self.items[nm]
 			old['categories'].extend(it['categories'])
-			old['price'] = min(it['price'], old['price'])
+			old['points'] = min(it['points'], old['points'])
 			self.items[nm] = old
 
 	def parse_packages(self):
@@ -98,7 +98,7 @@ class Builder:
 				price = float(''.join([c for c in price if c in '0123456789.']))
 				print('\tPrice:', price, flush=True)
 			assert price is not None
-			self.packages.append({'pack_name': bundle,'points': points, 'approx_price_usd': price})
+			self.packages.append({'pack_name': bundle, 'points': points, 'approx_price_usd': price})
 		print('Found %s point packages.' % len(self.packages))
 		assert len(self.packages) > 0
 
