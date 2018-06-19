@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>PoE Microtransaction Indexer</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+	<script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+	<script src="./Main.js" type="text/babel"></script>
+
+	<style>
+		body{
+			font-family: 'Roboto', sans-serif;
+		}
+
+		table{
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		td {
+			min-width: 70px;
+			border: none;
+		}
+
+		th {
+			text-align: left;
+			cursor: pointer;
+		}
+
+		tr {
+			border-bottom: 1px solid gray;
+		}
+
+		a {
+			text-decoration: none !important;
+		}
+
+		a:hover {
+			text-shadow: 1px 1px black;
+		}
+
+		tr:nth-child(even) {background: #bbe3e8}
+		tr:nth-child(odd) {background: #FFF}
+
+		.disclaimer{
+			font-size: 10px;
+			color: gray;
+		}
+
+		.right {
+			position: fixed;
+			right: 5px;
+			top: 0;
+			background-color: cadetblue;
+			padding: 5px;
+		}
+
+		.pack_name {
+			color: white;
+			font-weight: bold;
+			text-decoration: none !important;
+		}
+	</style>
+</head>
+<body>
+	<div id="root">Loading...</div>
+</body>
+</html>
