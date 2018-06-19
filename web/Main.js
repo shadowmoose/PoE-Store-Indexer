@@ -92,7 +92,7 @@ class Main extends React.Component {
 
 		return (
 			<div>
-				<h2>MTX Store Items</h2>
+				<h2>PoE MTX - Unofficial Store Item Browser</h2>
 				<div className={'searchbox'}>
 					<label htmlFor={'searchbox'}>Search: </label>
 					<input id='searchbox' type={'text'} onChange={this._search} value={this.state.term} autoFocus/>
@@ -101,7 +101,8 @@ class Main extends React.Component {
 					Estimated best Point Pack: <a href={'https://www.pathofexile.com/purchase'}>
 						<i className={'pack_name'}>{best_pack}</i>
 					</a><br />
-					Approx Value: <i className={'pack_name'}>${pack_price} USD</i>
+					Approx Value: <i className={'pack_name'}>${pack_price} USD</i><br />
+					<a href="https://github.com/shadowmoose/PoE-Store-Indexer" target={"_blank"}>View this project on Github.</a>
 				</div>
 				<div className={'disclaimer'}>
 					Note: All prices, especially those in USD, are approximate. Some, or even all, of the data on this page may be incorrect.
