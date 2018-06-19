@@ -109,7 +109,7 @@ class Main extends React.Component {
 					Approx Value: <i className={'pack_name'}>${pack_price} USD</i><br />
 					<a href="https://github.com/shadowmoose/PoE-Store-Indexer" target={"_blank"}>View this project on Github.</a><br />
 					<a href={'https://travis-ci.com/shadowmoose/PoE-Store-Indexer'} target={'_blank'}>
-						<img src="https://travis-ci.com/shadowmoose/PoE-Store-Indexer.svg?branch=master" />
+						<img src="https://travis-ci.com/shadowmoose/PoE-Store-Indexer.svg?branch=master" title={"View build page."}/>
 					</a>
 				</div>
 				<div className={'disclaimer'}>
