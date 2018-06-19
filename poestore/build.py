@@ -45,7 +45,7 @@ class Builder:
 			link = url + '#microtransaction-' + (re.findall(self.link_regex, link)[0])
 			ob = {
 				'name': name,
-				'price': price,
+				'points': int(price),
 				'description': desc,
 				'image': img,
 				'link': link,
@@ -111,8 +111,8 @@ class Builder:
 			'store_items': [o for o in self.items.values()],
 			'point_packages': self.packages,
 			'@metadata': {
-				'version': 1.3,
-				'compatible_since': 1.2,
+				'version': 1.4,
+				'compatible_since': 1.4,
 				'timestamp': time.time(),
 				'runtime': time.time() - self.start
 			}
