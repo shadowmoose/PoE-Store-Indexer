@@ -92,9 +92,12 @@ class Main extends React.Component {
 
 		return (
 			<div>
-				<h2>PoE MTX - Unofficial Store Item Browser [<span className={'gray inline'}>{
-					this.state.data?'Last updated: '+timeStamp(new Date(this.state.data['@metadata']['timestamp']*1000)):'Loading...'
-				}</span>]</h2>
+				<h2>
+					PoE MTX - Unofficial Store Item Browser
+					[<span className={'gray inline'}>
+						{this.state.data?'Last updated: '+timeStamp(new Date(this.state.data['@metadata']['timestamp']*1000)):'Loading...'}
+					</span>]
+				</h2>
 				<div className={'searchbox'}>
 					<label htmlFor={'searchbox'}>Search: </label>
 					<input id='searchbox' type={'text'} onChange={this._search} value={this.state.term} autoFocus/>
@@ -104,7 +107,10 @@ class Main extends React.Component {
 						<i className={'pack_name'}>{best_pack}</i>
 					</a><br />
 					Approx Value: <i className={'pack_name'}>${pack_price} USD</i><br />
-					<a href="https://github.com/shadowmoose/PoE-Store-Indexer" target={"_blank"}>View this project on Github.</a>
+					<a href="https://github.com/shadowmoose/PoE-Store-Indexer" target={"_blank"}>View this project on Github.</a><br />
+					<a href={'https://travis-ci.com/shadowmoose/PoE-Store-Indexer'} target={'_blank'}>
+						<img src="https://travis-ci.com/shadowmoose/PoE-Store-Indexer.svg?branch=master" />
+					</a>
 				</div>
 				<div className={'disclaimer'}>
 					Note: All prices, especially those in USD, are approximate. Some, or even all, of the data on this page may be incorrect.
