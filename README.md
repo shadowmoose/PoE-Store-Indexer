@@ -1,5 +1,5 @@
 # Poe-Store-Indexer [![Build Status](https://travis-ci.com/shadowmoose/PoE-Store-Indexer.svg?branch=master)](https://travis-ci.com/shadowmoose/PoE-Store-Indexer)
-To view a serachable index of all the PoE MTX Store data this poject could find, go [here](https://shadowmoose.github.io/PoE-Store-Indexer/web/index.html).
+[To view a searchable webpage of all the MTX Store Data this project has found, go here](https://shadowmoose.github.io/PoE-Store-Indexer/web/index.html).
 
 Pulls as many of the Path of Exile microtransaction store sale items as it can find, and compiles them into a JSON data structure.
 
