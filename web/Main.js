@@ -92,7 +92,9 @@ class Main extends React.Component {
 
 		return (
 			<div>
-				<h2>PoE MTX - Unofficial Store Item Browser</h2>
+				<h2>PoE MTX - Unofficial Store Item Browser [<span className={'gray inline'}>{
+					this.state.data?'Last updated: '+timeStamp(new Date(this.state.data['@metadata']['timestamp']*1000)):'Loading...'
+				}</span>]</h2>
 				<div className={'searchbox'}>
 					<label htmlFor={'searchbox'}>Search: </label>
 					<input id='searchbox' type={'text'} onChange={this._search} value={this.state.term} autoFocus/>
