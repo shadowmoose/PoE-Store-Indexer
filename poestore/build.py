@@ -45,7 +45,7 @@ class Builder:
 			link = url + '#microtransaction-' + (re.findall(self.link_regex, link)[0])
 			ob = {
 				'name': name,
-				'price': price,
+				'points': int(price),
 				'description': desc,
 				'image': img,
 				'link': link,
@@ -60,7 +60,7 @@ class Builder:
 		else:
 			old = self.items[nm]
 			old['categories'].extend(it['categories'])
-			old['price'] = min(it['price'], old['price'])
+			old['points'] = min(it['points'], old['points'])
 			self.items[nm] = old
 
 	def parse_packages(self):
@@ -80,7 +80,7 @@ class Builder:
 			pf = p.find(class_='points')
 			if pf:
 				assert 'points' in pf.text.lower()
-				points = float(''.join([c for c in pf.text if c in '0123456789.']))
+				points = int(''.join([c for c in pf.text if c in '0123456789.']))
 			else:
 				for pts in p.find_all('li'):
 					if 'Points' in pts.text:
@@ -96,9 +96,9 @@ class Builder:
 				price = btn.text.strip().lower()
 				assert '$' in price
 				price = float(''.join([c for c in price if c in '0123456789.']))
-				print(price, flush=True)
+				print('\tPrice:', price, flush=True)
 			assert price is not None
-			self.packages.append({'pack_name': bundle,'points': points, 'approx_price_usd': price})
+			self.packages.append({'pack_name': bundle, 'points': points, 'approx_price_usd': price})
 		print('Found %s point packages.' % len(self.packages))
 		assert len(self.packages) > 0
 
@@ -111,8 +111,8 @@ class Builder:
 			'store_items': [o for o in sorted(self.items.values(), key=lambda it: it['name'])],
 			'point_packages': sorted(self.packages, key=lambda pak: pak['pack_name']),
 			'@metadata': {
-				'version': 1.3,
-				'compatible_since': 1.2,
+				'version': 1.4,
+				'compatible_since': 1.4,
 				'timestamp': time.time(),
 				'runtime': time.time() - self.start
 			}
