@@ -108,8 +108,8 @@ class Builder:
 
 	def to_string(self):
 		return json.dumps({
-			'store_items': [o for o in self.items.values()],
-			'point_packages': self.packages,
+			'store_items': [o for o in sorted(self.items.values(), key=lambda it: it['name'])],
+			'point_packages': sorted(self.packages, key=lambda pak: pak['pack_name']),
 			'@metadata': {
 				'version': 1.3,
 				'compatible_since': 1.2,
