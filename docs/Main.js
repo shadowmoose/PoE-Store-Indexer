@@ -9,7 +9,7 @@ class Main extends React.Component {
 
 	load(){
 		let xhr = new XMLHttpRequest();
-		xhr.open('GET', 'https://gist.githubusercontent.com/Shadow-Bot/c5b9e22d36cd9b08329b97a9aaa19746/raw/data.json');
+		xhr.open('GET', 'https://gist.githubusercontent.com/Shadow-Bot/9b64e0f0452001883cb341fee975c12b/raw/data.json');
 		xhr.onload = ()=>{
 			if (xhr.status === 200) {
 				let data = JSON.parse(xhr.responseText);
