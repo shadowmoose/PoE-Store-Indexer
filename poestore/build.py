@@ -127,7 +127,7 @@ if __name__ == "__main__":
 	print(filepath, flush=True)
 	os.makedirs(os.path.dirname(filepath), exist_ok=True)
 	_b.write(filepath)
-	_g = Gist(gist_id='c5b9e22d36cd9b08329b97a9aaa19746', bkup_file='../api_key.key')
+	_g = Gist(gist_id='9b64e0f0452001883cb341fee975c12b', bkup_file='../api_key.key')
 	if _g.change('data.json', _b.to_string()):
 		print('Done. Pushed changes.')
 	else:
