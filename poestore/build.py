@@ -7,6 +7,11 @@ import time
 from gist import Gist
 
 
+headers = {
+	'User-Agent': 'Mozilla/5.0 (Android 4.4; Mobile; rv:41.0) Gecko/41.0 Firefox/41.0'
+}
+
+
 class Builder:
 	def __init__(self):
 		self.url_base = 'https://www.pathofexile.com/shop/'
@@ -20,7 +25,7 @@ class Builder:
 	def run(self):
 		print('Loading store page...', flush=True)
 		self.start = time.time()
-		page = requests.get(self.url_base).text
+		page = requests.get(self.url_base, headers=headers).text
 		matches = [m.group(1) for m in re.finditer(self.regex, page, re.MULTILINE)]
 		print('\t', 'Found %i categories.' % len(matches), flush=True)
 		assert len(matches) > 0
@@ -31,7 +36,7 @@ class Builder:
 
 	def parse_page(self, url, category):
 		print(url, flush=True)
-		resp = requests.get(url)
+		resp = requests.get(url, headers=headers)
 		if resp.status_code != 200:
 			raise Exception('Invalid response from server: %s' % resp.status_code)
 		soup = BeautifulSoup(resp.text, "html.parser")
@@ -65,7 +70,7 @@ class Builder:
 
 	def parse_packages(self):
 		print('Parsing Point Packages...', flush=True)
-		resp = requests.get(self.package_url)
+		resp = requests.get(self.package_url, headers=headers)
 		if resp.status_code != 200:
 			raise Exception('Invalid response from server: %s' % resp.status_code)
 		soup = BeautifulSoup(resp.text, "html.parser")
