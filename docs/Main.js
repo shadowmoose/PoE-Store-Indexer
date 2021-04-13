@@ -1,3 +1,7 @@
+const { useState, useEffect } = React
+
+const listing_limit = 300;
+
 class Main extends React.Component {
 	constructor(props) {
 		super(props);
@@ -53,6 +57,7 @@ class Main extends React.Component {
 		let minprice = 10000;
 		let best_pack = "Unknown";
 		let pack_price= -99;
+		let listingCount = 0;
 		if(this.state.data) {
 			this.state.data.point_packages.forEach((pp)=>{
 				let np = Math.min(minprice, pp.approx_price_usd / pp.points);
@@ -63,7 +68,7 @@ class Main extends React.Component {
 				}
 			});
 
-			eles = this.state.data.store_items.filter((it) => {
+			let tmp = this.state.data.store_items.filter((it) => {
 				if (it === '')
 					return true;
 				let t = this.normalize(this.state.term);
@@ -72,7 +77,11 @@ class Main extends React.Component {
 					this.normalize(it.name).includes(t) ||
 					this.normalize(it.description).includes(t)
 				);
-			}).sort((a, b)=>{
+			});
+
+			listingCount = tmp.length;
+
+			eles = tmp.sort((a, b)=>{
 				let field = this.state.sort;
 				let rev = this.state.reverse? -1:1;
 				if (a[field] < b[field])
@@ -80,13 +89,8 @@ class Main extends React.Component {
 				if (a[field] > b[field])
 					return rev;
 				return 0;
-			}).map((it) => {
-				return <tr key={it.name}>
-					<td><a href={it.link} target={'_blank'}>{it.name}</a></td>
-					<td>{it.points}</td>
-					<td>${it.usd}</td>
-					<td>{it.description}</td>
-				</tr>
+			}).slice(0, listing_limit).map((it) => {
+				return <DataRow key={it.name} data={it}/>
 			});
 		}
 
@@ -125,6 +129,7 @@ class Main extends React.Component {
 						<th onClick={()=>{this._reorder('description')}}>Description</th>
 					</tr>
 						{eles}
+						{listingCount > listing_limit ? <tr><th>Remaining {listingCount - listing_limit} listings truncated...</th></tr> : null}
 					</tbody>
 				</table>
 			</div>
@@ -132,6 +137,40 @@ class Main extends React.Component {
 	}
 }
 
+
+function DataRow (props) {
+	const data = props.data;
+	const [visible, setVisible] = useState(false);
+	const [imagePos, setImagePos] = useState({x: props.x, y: props.y});
+
+	function showImage(evt) {
+		setImagePos({
+			x: evt.pageX,
+			y: evt.pageY
+		});
+		setVisible(true)
+	}
+
+	return <tr key={data.name} onClick={showImage} onMouseLeave={()=>setVisible(false)}>
+		<td><a href={data.link} onMouseEnter={showImage} target={'_blank'}>{data.name}</a></td>
+		<td>{data.points}</td>
+		<td>${data.usd}</td>
+		<td>{data.description} {visible ? <DataImage key={data.name} src={data.image} alt={data.name} pos={imagePos}/> : null}</td>
+	</tr>
+}
+
+function DataImage(props) {
+	const src = props.src;
+	const alt = props.alt;
+
+	return <img src={src} alt={alt} style={{
+		position: 'absolute',
+		top: (props.pos.y) + 'px',
+		left: props.pos.x + 'px',
+		pointerEvents: 'none',
+		transform: 'translate(0, -100%)'
+	}}/>
+}
 
 ReactDOM.render(
 	<Main />,
